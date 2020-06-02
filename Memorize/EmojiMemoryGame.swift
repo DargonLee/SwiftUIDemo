@@ -8,11 +8,19 @@
 
 import SwiftUI
 
+fileprivate func cardContentFactory(pairIndex: Int) -> String {
+    return "😀"
+}
 
 class EmojiMemoryGame {
-    private(set) var model: MemoryGame<String> = MemoryGame<String>(numberOfPairsOfCards: 2, cardContentFactory: { (pairIndex: Int) -> String in
-        return "😀"
-    })
+    private(set) var model: MemoryGame<String> = createMemoryGame()
+    
+    static func createMemoryGame() -> MemoryGame<String> {
+        let emojis = ["👻", "🎃", "🐼"]
+        return MemoryGame(numberOfPairsOfCards: emojis.count) { pairIndex in
+            return emojis[pairIndex]
+        }
+    }
     
     // MARK: - Access to the Model
     var cards: Array<MemoryGame<String>.Card> {

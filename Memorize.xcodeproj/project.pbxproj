@@ -41,6 +41,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		18124DCB24852CC700775F6B /* Resourse */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resourse;
+			sourceTree = "<group>";
+		};
 		18C5657F2481315C00136559 = {
 			isa = PBXGroup;
 			children = (
@@ -68,6 +75,7 @@
 				18C565912481316100136559 /* Assets.xcassets */,
 				18C565962481316100136559 /* LaunchScreen.storyboard */,
 				18C565992481316100136559 /* Info.plist */,
+				18124DCB24852CC700775F6B /* Resourse */,
 				18C565932481316100136559 /* Preview Content */,
 			);
 			path = Memorize;
