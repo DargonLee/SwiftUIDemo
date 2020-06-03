@@ -12,8 +12,8 @@ fileprivate func cardContentFactory(pairIndex: Int) -> String {
     return "😀"
 }
 
-class EmojiMemoryGame {
-    private(set) var model: MemoryGame<String> = createMemoryGame()
+class EmojiMemoryGame: ObservableObject {
+    @Published private(set) var model: MemoryGame<String> = createMemoryGame()
     
     static func createMemoryGame() -> MemoryGame<String> {
         let emojis = ["👻", "🎃", "🐼"]
