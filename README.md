@@ -4,4 +4,4 @@
 
 
 
-<img src="https://github.com/DargonLee/SwiftUIDemo/blob/master/01.png" width="280">
+<img src="./01.png" width="280">
