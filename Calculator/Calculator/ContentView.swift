@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var brain: CalculatorBrain = .left("0")
     
     let scale: CGFloat = UIScreen.main.bounds.width / 414
     var body: some View {
@@ -22,19 +23,24 @@ struct ContentView: View {
          */
         VStack(spacing: 12) {
             Spacer() // “它会尝试将可占据的空间全部填满”
-            Text("0")
+            Text(brain.output)
                 .font(.system(size: 76))
                 .minimumScaleFactor(0.5)
-                .padding(.trailing, 24)
+                .padding(.trailing, 24 * scale)
                 .lineLimit(1)
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-            CalculatorButtonPad()
+//            Button("Test") {
+//                self.brain = .left("1.23")
+//            }
+            CalculatorButtonPad(brain: $brain)
                 .padding(.bottom)
         }.scaleEffect(scale)
     }
 }
 
 struct CalculatorButtonPad: View {
+    @Binding var brain: CalculatorBrain
+    
     let pad: [[CalculatorButtonItem]] = [
         [.command(.clear), .command(.flip),.command(.percent), .op(.divide)],
         [.digit(7), .digit(8), .digit(9), .op(.multiply)],
@@ -46,7 +52,23 @@ struct CalculatorButtonPad: View {
     var body: some View {
         VStack(spacing: 8) {
             ForEach(pad, id: \.self) { row in
-                CalculatorButtonRow(row: row)
+                CalculatorButtonRow(row: row, brain: self.$brain)
+            }
+        }
+    }
+}
+
+struct CalculatorButtonRow: View {
+    let row: [CalculatorButtonItem]
+    @Binding var brain: CalculatorBrain
+    
+    var body: some View {
+        HStack { // 水平布局排列
+            ForEach(row, id: \.self) { item in
+                CalculatorButton(title: item.title, size: item.size, backgroundColorName: item.backgroundColorName) {
+                    self.brain = self.brain.apply(item: item)
+                    print("Button \(item.title)")
+                }
             }
         }
     }
@@ -75,19 +97,6 @@ struct CalculatorButton: View {
 //                    .foregroundColor(.white)
 //                    .frame(width: size.width, height: size.height)
 //            }
-        }
-    }
-}
-
-struct CalculatorButtonRow: View {
-    let row: [CalculatorButtonItem]
-    var body: some View {
-        HStack { // 水平布局排列
-            ForEach(row, id: \.self) { item in
-                CalculatorButton(title: item.title, size: item.size, backgroundColorName: item.backgroundColorName) {
-                    print("Button \(item.title)")
-                }
-            }
         }
     }
 }

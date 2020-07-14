@@ -146,3 +146,74 @@ var body: some View {
 ```
 
 > “小技巧：你可以在预览中使用在 ContentView() 后面添加 environment(\.colorScheme, .dark) 来快速检查深色模式下的 UI。”
+
+
+
+##### @State数据状态驱动界面
+
+- **State**
+
+“使用 @State 是最简单的关联方式。在 ContentView 中，加入一个 brain 属性(数据模型)：
+
+@State 属性值仅只能在属性本身被设置时会触发 UI 刷新，这个特性让它非常适合用来声明一个值类型的值：因为对值类型的属性的变更，也会触发整个值的重新设置，进而刷新 UI。
+
+```swift
+struct ContentView : View {
+
+@State private var brain: CalculatorBrain = .left("0")
+
+var body: some View {
+ // ...
+ }
+}
+```
+
+
+和一般的存储属性不同，@State 修饰的值，在 SwiftUI 内部会被自动转换为一对 setter 和 getter，对这个属性进行赋值的操作将会触发 View 的刷新，它的 body 会被再次调用，底层渲染引擎会找出界面上被改变的部分，根据新的属性值计算出新的 View，并进行刷新。”
+
+
+
+对于 @State 修饰的属性的访问，只能发生在 body 或者 body 所调用的方法中。你不能在外部改变 @State 的值，它的所有相关操作和状态改变都应该是和当前 View 挂钩的。如果你需要在多个 View 中共享数据，@State 可能不是很好的选择；如果还需要在 View 外部操作数据，那么 @State 甚至就不是可选项了。
+
+
+
+- **@Binding**
+
+“@Binding 就是用来解决层级过多的情况下 `@State`修饰的属性值在不同对象之间传递时顶层传递不到。和 @State 类似，@Binding 也是对属性的修饰，它做的事情是将值语义的属性“转换”为引用语义。对被声明为 @Binding 的属性进行赋值，改变的将不是属性本身，而是它的引用，这个改变将被向外传递。”
+
+```swift
+struct CalculatorButtonPad: View {
+  @Binding var brain: CalculatorBrain
+  // ...
+
+  var body: some View {
+    // ...
+  }
+}
+
+struct CalculatorButtonRow : View {
+  @Binding var brain: CalculatorBrain
+  // ...
+
+  var body: some View {
+    // ...
+  }
+}
+```
+
+##### 投影属性 (projection property)。
+
+在传递 brain 时，我们在它前面加上美元符号 $。在 Swift 5.1 中，对一个由 @ 符号修饰的属性，在它前面使用 $ 所取得的值，被称为投影属性 (projection property)。
+
+需要知道 $brain 的写法将 brain 从 State 转换成了引用语义的 Binding，并向下传递。
+
+```swift
+struct CalculatorButtonPad: View {
+  var body: some View {
+   VStack(spacing: 8) {
+      ForEach(pad, id: \.self) { row in
+        CalculatorButtonRow(row: row, brain: self.$brain)
+      }
+    }
+ }
+```
