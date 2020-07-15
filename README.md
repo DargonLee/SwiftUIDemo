@@ -10,8 +10,6 @@ demo截图
 
 ![avatar](/Users/apple/Library/Application%20Support/marktext/images/45a2e7f5c1df6d5e1ae00b1c81acbc2533ea6749.png)
 
-
-
 ##### Text 的使用
 
 ```swift
@@ -38,6 +36,34 @@ Button(action: {
 ```
 
 在使用`modifiler`的时候要注意，先后顺序，比如 `.background`和`.cornerRadius`顺序颠倒后，渲染结果是不一样的，因为`SwiftUI`的渲染逻辑是按顺序渲染的。
+
+
+
+- 给button添加sheet弹窗
+
+```swift
+Button("操作履历: \(model.history.count)") {
+    self.editingHistory = true
+      print(self.model.history)
+}
+.sheet(isPresented: self.$editingHistory) {
+    HistoryView(model: self.model)
+}
+```
+
+- 给他button添加alert弹窗
+
+```swift
+.alert(isPresented: self.$editingHistory, content: { () -> Alert in
+       Alert(
+       title: Text(self.model.brain.output),
+       message: Text(self.model.historyDetail),
+       dismissButton: .default(Text("OK"))
+   )
+})
+```
+
+上面的弹窗不仅能给Button加其他的View也可以添加
 
 ##### Stack 容器
 
@@ -147,8 +173,6 @@ var body: some View {
 
 > “小技巧：你可以在预览中使用在 ContentView() 后面添加 environment(\.colorScheme, .dark) 来快速检查深色模式下的 UI。”
 
-
-
 ##### @State数据状态驱动界面
 
 - **State**
@@ -168,14 +192,9 @@ var body: some View {
 }
 ```
 
-
 和一般的存储属性不同，@State 修饰的值，在 SwiftUI 内部会被自动转换为一对 setter 和 getter，对这个属性进行赋值的操作将会触发 View 的刷新，它的 body 会被再次调用，底层渲染引擎会找出界面上被改变的部分，根据新的属性值计算出新的 View，并进行刷新。”
 
-
-
 对于 @State 修饰的属性的访问，只能发生在 body 或者 body 所调用的方法中。你不能在外部改变 @State 的值，它的所有相关操作和状态改变都应该是和当前 View 挂钩的。如果你需要在多个 View 中共享数据，@State 可能不是很好的选择；如果还需要在 View 外部操作数据，那么 @State 甚至就不是可选项了。
-
-
 
 - **@Binding**
 
@@ -216,4 +235,81 @@ struct CalculatorButtonPad: View {
       }
     }
  }
+```
+
+##### ObservableObject 和 @ObjectBinding
+
+如果说 @State 是全自动驾驶的话，ObservableObject 就是半自动，它需要一些额外的声明。ObservableObject 协议要求实现类型是 class，它只有一个需要实现的属性：objectWillChange。在数据将要发生改变时，这个属性用来向外进行“广播”，它的订阅者 (一般是 View 相关的逻辑) 在收到通知后，对 View 进行刷新。
+
+创建 ObservableObject 后，实际在 View 里使用时，我们需要将它声明为 @ObservedObject。这也是一个属性包装，它负责通过订阅 objectWillChange 这个“广播”，将具体管理数据的 ObservableObject 和当前的 View 关联起来。
+
+```swift
+在 CalculatorModel 里添加 CalculatorBrain：
+
+class CalculatorModel: ObservableObject {
+
+  let objectWillChange = PassthroughSubject<Void, Never>()
+
+  var brain: CalculatorBrain = .left("0") {
+    willSet { objectWillChange.send() }
+  }
+}
+然后在 ContentView 里将 @State 的内容都换成对应的 @ObservedObject 和 CalculatorModel：
+
+struct ContentView : View {
+  // @State private var brain: CalculatorBrain = .left("0")
+  @ObservedObject var model = CalculatorModel() // 1
+
+  var body: some View {
+    VStack(spacing: 12) {
+      Spacer()
+      Text(model.brain.output) // 2
+        //...
+      CalculatorButtonPad(brain: $model.brain) // 3
+        //...
+    }     
+  }
+}
+```
+
+##### 使用 @Published 和自动生成
+
+在 ObservableObject 中，对于每个对界面可能产生影响的属性，我们都可以像上面 brain 的 willSet 那样，手动调用 objectWillChange.send()。如果在 model 中有很多属性，我们将需要为它们一一添加 willSet，这无疑是非常麻烦，而且全是重复的模板代码。实际上，如果我们省略掉自己声明的 objectWillChange，并把属性标记为 @Published，编译器将会帮我们自动完成这件事情。
+
+```swift
+class CalculatorModel: ObservableObject {
+
+  @Published var brain: CalculatorBrain = .left("0")
+}
+```
+
+##### 使用 @EnvironmentObject 传递数据
+
+为了减少页面层级过深的情况下，传值过多导致很多无效的代码，可以在这个View的子层级中使用`@EnvironmentObject`来直接过去这个绑定的环境值
+
+```swift
+struct ContentView : View {
+
+  @EnvironmentObject var model: CalculatorModel
+  // ...
+}
+类似地，在 CalculatorButtonRow 里，也可以修改 model 的定义：
+
+struct CalculatorButtonRow : View {
+  @EnvironmentObject var model: CalculatorModel
+  // ...
+}
+```
+
+只需要在顶层级和最低层级添加上面修饰符，这样在对应的 View 生成时，我们不需要手动为被标记为 @EnvironmentObject 的值进行指定，它们会自动去查询 View 的 Environment 中是否有符合的类型的值，如果有则使用它们，如没有则抛出运行时的错误。
+
+
+
+最后，我们在 SceneDelegate.swift 文件中创建 ContentView 的地方，通过 environmentObject 把通用的 CalculatorModel 添加上去：
+
+```swift
+
+window.rootViewController = UIHostingController(
+ rootView: ContentView().environmentObject(CalculatorModel())
+)
 ```
