@@ -10,6 +10,8 @@ demo截图
 
 ![avatar](/Users/apple/Library/Application%20Support/marktext/images/45a2e7f5c1df6d5e1ae00b1c81acbc2533ea6749.png)
 
+### 第一章
+
 ##### Text 的使用
 
 ```swift
@@ -18,6 +20,17 @@ Text("+")
  .foregroundColor(.white)
  .padding()
  .background(Color.orange)
+```
+
+文本过多的化需要一些限制
+
+通过 .fixedSize(horizontal: false, vertical: true)，可以在竖直方向上显示全部文本，同时在水平方向上保持按照上层 View 的限制来换行。
+
+```swift
+Text(model.descriptionText)
+      .font(.callout)
+      .foregroundColor(Color(hex: 0x666666))
+      .fixedSize(horizontal: false, vertical: true)
 ```
 
 ##### Button 的使用
@@ -36,8 +49,6 @@ Button(action: {
 ```
 
 在使用`modifiler`的时候要注意，先后顺序，比如 `.background`和`.cornerRadius`顺序颠倒后，渲染结果是不一样的，因为`SwiftUI`的渲染逻辑是按顺序渲染的。
-
-
 
 - 给button添加sheet弹窗
 
@@ -173,6 +184,10 @@ var body: some View {
 
 > “小技巧：你可以在预览中使用在 ContentView() 后面添加 environment(\.colorScheme, .dark) 来快速检查深色模式下的 UI。”
 
+
+
+### 第二章
+
 ##### @State数据状态驱动界面
 
 - **State**
@@ -303,13 +318,317 @@ struct CalculatorButtonRow : View {
 
 只需要在顶层级和最低层级添加上面修饰符，这样在对应的 View 生成时，我们不需要手动为被标记为 @EnvironmentObject 的值进行指定，它们会自动去查询 View 的 Environment 中是否有符合的类型的值，如果有则使用它们，如没有则抛出运行时的错误。
 
-
-
 最后，我们在 SceneDelegate.swift 文件中创建 ContentView 的地方，通过 environmentObject 把通用的 CalculatorModel 添加上去：
 
 ```swift
-
 window.rootViewController = UIHostingController(
  rootView: ContentView().environmentObject(CalculatorModel())
 )
+```
+
+### 第三章
+
+##### Image 使用
+
+- 加载常规图片（根据图片名字）
+
+```swift
+Image("Pokemon")
+.resizable()
+.frame(width: 50, height: 50)
+.aspctRatio(contentMode: .fit)
+.shadow(radius: 4)
+```
+
+1、默认情况下，SwiftUI 中图片绘制与 frame 是无关的，而只会遵从图片本身的大小。如果我们想要图片可以按照所在的 frame 缩放，需要添加 resizable()。
+
+2、图片的原始尺寸比例和使用 frame(width:height:) 所设定的长宽比例可能有所不同。aspectRatio 让图片能够保持原始比例。不过在本例中，缩放前的图片长宽比也是 1:1，所以预览中不会有什么变化。
+
+
+
+- 加载系统提供的图标
+
+```swift
+Image(systemName: "info.circle")
+    .font(.system(size: 25))
+    .foregroundColor(.white)
+    .frame(width: 30, height: 30)
+```
+
+1、可以使用.font来控制显示的大小
+
+2、.font(.system(size: 25)) 虽然可以控制图片的显示尺寸，但是它并不会改变 Image 本身的 frame。默认情况下的 frame.size 非常小，这会使按钮的可点击范围过小，因此我们使用 .frame(width:height:) 来指定尺寸。因为加载后的 SF Symbol 是 Image，配合 frame 使用上面处理图像时提到的 resizable 和 padding 来指定显示范围和可点击范围也是可以的，但直接设置 font 和 frame 会更简单一些。
+
+
+
+##### View Modifier 使用
+
+ViewModifier 是 SwiftUI 提供的一个协议，它只有一个要求实现的方法：
+
+```swift
+public protocol ViewModifier {
+ func body(content: Self.Content) -> Self.Body
+}
+```
+
+我需要将重复创建的modifier抽离出一个自定义的 modifier，就可以跟系统的modifier使用一样方便
+
+
+
+定义：
+
+```swift
+struct ToolButtonModifier: ViewModifier {
+  func body(content: Content) -> some View {
+    content
+      .font(.system(size: 25))
+      .foregroundColor(.white)
+      .frame(width: 30, height: 30)
+  }
+}
+```
+
+使用：
+
+```swift
+Button(action: { print("fav") }) {
+  Image(systemName: "star")
+    .modifier(ToolButtonModifier())
+}
+```
+
+##### 背景颜色渐变
+
+例如背景为圆角矩形
+
+```swift
+VStack {
+}
+// ...
+.background(
+    RoundedRectangle(cornerRadius: 20)
+)
+```
+
+在 SwiftUI 中，创建渐变非常简单。一般来说，分为两个步骤：
+
+```swift
+// 1
+let gradient = Gradient(colors: [.white, model.color])
+// 2
+let gradientStyle = LinearGradient(
+ gradient: gradient,
+ startPoint: .leading,
+ endPoint: .trailing)
+```
+
+
+创建一个代表渐变数据的模型：Gradient，它基本就是一系列颜色。如果我们不明确指定颜色位置的话，输入的颜色将在渐变轴上等分。比如例子中的渐变起始位置和终止位置上分别是白色和宝可梦模型中定义的颜色。
+
+选取一个渐变 style，比如线性渐变 (LinearGradient)，径向渐变(RadialGradient) 或角度渐变 (AngularGradient)。将 1 中定义的 Gradient 和合适的渐变参数传入，就可以得到一个可适用于 Shape 上的渐变了。
+
+
+
+##### ZStack使用
+
+ZStack是在Z轴上的层叠，比如我们要给View的background 既要添加渐变色也要添加边框，代码如下
+
+```swift
+.background(
+  ZStack {
+    RoundedRectangle(cornerRadius: 20)
+      .stroke(model.color, style: StrokeStyle(lineWidth: 4))
+    RoundedRectangle(cornerRadius: 20)
+      .fill(
+        LinearGradient(
+          gradient: Gradient(colors: [.white, model.color]),
+          startPoint: .leading,
+          endPoint: .trailing
+        )
+      )
+  }
+)
+```
+
+##### 动画
+
+直接在点击事件中用`withAnimation{}`改变State的状态
+
+- 设置参数的动画
+
+```swift
+.onTapGesture {
+ // 毫无意义的动画，请不要用在实际项目里！
+ let animation = Animation
+ .linear(duration: 0.5)
+ .delay(0.2)
+ .repeatForever(autoreverses: true)
+ withAnimation(animation) {
+ self.expanded.toggle()
+ }
+}
+```
+
+- 常用的动画
+
+```swift
+.onTapGesture {
+ withAnimation {
+     self.expanded.toggle()
+ }
+}
+```
+
+
+
+另一种动画方式，隐式动画，就更简单。通过 View 上的 animtion 修饰，就可以在 View 中支持动画的属性发生变化时自动为整个 View 添加上动画支持了。可以将上面的代码重写一下：
+
+```swift
+VStack {
+ // ...
+}
+.frame(height: expanded ? 120 : 80) // 5
+.background(
+ // ...
+)
+.padding(.horizontal)
+.animation(
+ .spring(
+ response: 0.55, 
+dampingFraction: 0.425, 
+blendDuration: 0
+ )
+) // 隐式动画
+.onTapGesture {
+ self.expanded.toggle()
+}
+```
+
+##### overlay使用
+
+overlay 在当前 View (ScrollView) 上方添加一层另外的 View。它的行为和 ZStack 比较相似，只不过 overlay 会尊重它下方的原有 View 的布局，而不像 ZStack 中的 View 那样相互没有约束。不过对于我们这个例子，overlay 和 ZStack 的行为没有区别，选择 overlay 纯粹是因为嵌套少一些，语法更简单。
+
+```swift
+ScrollView {
+         // ...
+    }.overlay( // 1
+      VStack {
+        Spacer()
+        PokemonInfoPanel(model: .sample(id: 1))
+      }.edgesIgnoringSafeArea(.bottom) // 2
+    )
+```
+
+##### 包装 UIView 类型
+
+SwiftUI 还处在非常初期的阶段，难免会出现无法实现的效果或者在 SwiftUI 中无法绕过的问题。遇到这样的情况时，最简单的解决方案是把 UIKit 中已有的部分进行封装，提供给 SwiftUI 使用。
+
+
+
+SwiftUI 中的 UIViewRepresentable 协议提供了封装 UIView 的功能。这个协议要求我们实现两个方法：
+
+```swift
+protocol UIViewRepresentable : View
+  associatedtype UIVieType : UIView
+  func makeUIView(context: Self.Context) -> Self.UIViewType
+  func updateUIView(
+    _ uiView: Self.UIViewType, 
+    context: Self.Context
+  )
+  // ...
+}
+```
+
+例子：
+
+```swift
+struct BlurView: UIViewRepresentable {
+    let style: UIBlurEffect.Style
+    
+    func makeUIView(context: UIViewRepresentableContext<BlurView>) -> UIView {
+        let view = UIView(frame: .zero)
+        view.backgroundColor = .clear
+        
+        let blurEffect = UIBlurEffect(style: style)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(blurView)
+        
+        NSLayoutConstraint.activate([
+            blurView.heightAnchor.constraint(equalTo: view.heightAnchor),
+            blurView.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
+        return view
+    }
+    
+    func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<BlurView>) {
+        
+    }
+}
+
+
+// 外部可以直接使用
+ZStack {
+    BlurView(style: style)
+ }
+```
+
+##### List使用
+
+```swift
+struct PokemonList: View {
+  var body: some View {
+    List(PokemonViewModel.all) { pokemon in
+      PokemonInfoRow(model: pokemon)
+    }
+  }
+}
+```
+
+List 是最传统的构建列表的方式。它接受一个数组，数组中的元素需要遵守 Identifiable 协议。该协议只有一个要求，那就是用来辨别某个值的 id：
+
+```swift
+protocol Identifiable {
+ associatedtype ID : Hashable
+ var id: Self.ID { get }
+}
+```
+
+##### ScrollView使用
+
+形成一个可滚动的列表数据
+
+```swift
+struct PokemonList: View {
+  var body: some View {
+    ScrollView {
+      ForEach(PokemonViewModel.all) { pokemon in
+        PokemonInfoRow(model: pokemon)
+      }
+    }
+  }
+}
+```
+
+##### Session使用
+
+会组成一个group组
+
+里面的Toggle 会显示一个Item 左边为文本，右边是开关
+
+```swift
+Section(header: Text("选项")) {
+            Toggle(isOn: $settings.showEnglishName) {
+                Text("显示英文名")
+            }
+            Picker(selection: $settings.sorting, label: Text("排序方式")) {
+                ForEach(Settings.Sorting.allCases, id: \.self) {
+                    Text($0.text)
+                }
+            }
+            Toggle(isOn: $settings.showFavoriteOnly) {
+                Text("只显示收藏")
+            }
+        }
 ```
