@@ -16,11 +16,21 @@ struct PokemonList: View {
 //            PokemonInfoRow(model: pokemon)
 //        }
         ScrollView {
-            TextField("搜索", text: $searchStr, onEditingChanged: { changed in
-                print("onEditing: \(changed)")
-            }) {
-                print("userName: \(self.searchStr)")
+            HStack {
+                TextField("搜索", text: $searchStr, onEditingChanged: { changed in
+                    print("onEditing: \(changed)")
+                }) {
+                    print("userName: \(self.searchStr)")
+                }
+                .font(.system(size: 15))
+                .padding(6)
             }
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color.green, style: StrokeStyle(lineWidth: 1))
+                )
+                .padding()
+            
             ForEach(PokemonViewModel.all) { pokemon in
                 PokemonInfoRow(
                     model: pokemon,
