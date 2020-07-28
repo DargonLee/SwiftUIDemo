@@ -10,22 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        TabView {
-            PokemonRootView()
-                .tabItem {
-                    VStack {
-                        Image(systemName: "chart.bar")
-                        Text("宝可梦")
-                    }
-            }
-            SettingRootView()
-                .tabItem {
-                    VStack {
-                        Image(systemName: "chart.bar")
-                        Text("设置")
-                    }
-            }
-        }
+        MainTab().environmentObject(Store())
     }
 }
 
