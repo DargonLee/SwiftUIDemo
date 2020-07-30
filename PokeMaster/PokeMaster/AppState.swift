@@ -12,22 +12,11 @@ import Combine
 struct AppState {
     var settings = Settings()
     var pokemonList = PokemonList()
+    var mainTab = MainTab()
 }
 
 extension AppState
 {
-    struct PokemonList {
-        var pokemons: [Int: PokemonViewModel]?
-        var loadingPokemons = false
-        
-        var allPokemonsByID: [PokemonViewModel] {
-            guard let pokemons = pokemons?.values else {
-                return []
-            }
-            return pokemons.sorted{ $0.id < $1.id }
-        }
-    }
-    
     struct Settings {
         enum Sorting: CaseIterable {
             case id, name, color, favorite
@@ -105,6 +94,113 @@ extension AppState
         
         var loginError: AppError?
         
+    }
+}
+
+
+extension AppState {
+    struct PokemonList {
+
+        struct SelectionState {
+            var expandingIndex: Int? = nil
+            var panelIndex: Int? = nil
+            var panelPresented = false
+            var radarProgress: Double = 0
+            var radarShouldAnimate = true
+
+            func isExpanding(_ id: Int) -> Bool {
+                expandingIndex == id
+            }
+        }
+
+        @FileStorage(directory: .cachesDirectory, fileName: "pokemons.json")
+        var pokemons: [Int: PokemonViewModel]?
+
+        @FileStorage(directory: .cachesDirectory, fileName: "abilities.json")
+        var abilities: [Int: AbilityViewModel]?
+
+        func abilityViewModels(for pokemon: Pokemon) -> [AbilityViewModel]? {
+            guard let abilities = abilities else { return nil }
+            return pokemon.abilities.compactMap { abilities[$0.ability.url.extractedID!] }
+        }
+
+        var loadingPokemons = false
+        var pokemonsLoadingError: AppError?
+
+        var selectionState = SelectionState()
+        var favoriteError: AppError?
+
+        var searchText = ""
+
+        var isSFViewActive = false
+
+        func displayPokemons(with settings: Settings) -> [PokemonViewModel] {
+
+            func isFavorite(_ pokemon: PokemonViewModel) -> Bool {
+                guard let user = settings.loginUser else { return false }
+                return user.isFavoritePokemon(id: pokemon.id)
+            }
+
+            func containsSearchText(_ pokemon: PokemonViewModel) -> Bool {
+                guard !searchText.isEmpty else {
+                    return true
+                }
+                return pokemon.name.contains(searchText) ||
+                       pokemon.nameEN.lowercased().contains(searchText.lowercased())
+            }
+
+            guard let pokemons = pokemons else {
+                return []
+            }
+
+            let sortFunc: (PokemonViewModel, PokemonViewModel) -> Bool
+            switch settings.sorting {
+            case .id:
+                sortFunc = { $0.id < $1.id }
+            case .name:
+                sortFunc = { $0.nameEN < $1.nameEN }
+            case .color:
+                sortFunc = {
+                    $0.species.color.name.rawValue < $1.species.color.name.rawValue
+                }
+            case .favorite:
+                sortFunc = { p1, p2 in
+                    switch (isFavorite(p1), isFavorite(p2)) {
+                    case (true, true): return p1.id < p2.id
+                    case (false, false): return p1.id < p2.id
+                    case (true, false): return true
+                    case (false, true): return false
+                    }
+                }
+            }
+
+            var filterFuncs: [(PokemonViewModel) -> Bool] = []
+            filterFuncs.append(containsSearchText)
+            if settings.showFavoriteOnly {
+                filterFuncs.append(isFavorite)
+            }
+
+            let filterFunc = filterFuncs.reduce({ _ in true}) { r, next in
+                return { pokemon in
+                    r(pokemon) && next(pokemon)
+                }
+            }
+
+            return pokemons.values
+                .filter(filterFunc)
+                .sorted(by: sortFunc)
+        }
+    }
+}
+
+
+extension AppState {
+    struct MainTab {
+        enum Index: Hashable {
+            case list, settings
+        }
+
+        var selection: Index = .list
     }
 }
 

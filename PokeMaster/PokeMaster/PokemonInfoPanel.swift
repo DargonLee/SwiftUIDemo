@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct PokemonInfoPanel: View {
+    
+    @EnvironmentObject var store: Store
     let model: PokemonViewModel
     @State var darkBlur = false
     
@@ -44,7 +46,7 @@ struct PokemonInfoPanel: View {
         }
         .padding(EdgeInsets(top: 12, leading: 30, bottom: 30, trailing: 30))
         //.background(Color.white)
-            .blurBackground(style: darkBlur ? .systemMaterialDark : .systemMaterial)
+        .blurBackground(style: darkBlur ? .systemMaterialDark : .systemMaterial)
         .cornerRadius(20)
         .fixedSize(horizontal: false, vertical: true)
     }

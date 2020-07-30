@@ -13,14 +13,16 @@ enum AppError: Error, Identifiable {
     
     case passwordWrong
     case networkingFailed(Error)
+    
+    case requiresLogin
 }
 
 extension AppError: LocalizedError {
     var localizedDescription: String {
         switch self {
-            case .passwordWrong: return "密码错误"
-            case .networkingFailed(let error):
-                return error.localizedDescription
+        case .passwordWrong: return "密码错误"
+        case .requiresLogin: return "需要账户"
+        case .networkingFailed(let error): return error.localizedDescription
         }
     }
 }

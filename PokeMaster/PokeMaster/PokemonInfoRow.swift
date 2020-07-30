@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct PokemonInfoRow: View {
+    @EnvironmentObject var store: Store
+    
     //let model = PokemonViewModel.sample(id: 1)
     let model: PokemonViewModel
     let expanded: Bool
@@ -43,22 +45,44 @@ struct PokemonInfoRow: View {
                 Spacer()
                 Button(action: {
                     print("Fav")
+                    self.store.dispatch(.toggleFavorite(index: self.model.id))
                 }) {
                     Image(systemName: "star")
                         .modifier(ToolButtonModifier())
+                }.alert(item: self.$store.appState.pokemonList.favoriteError) { error in
+                    Alert(
+                        title: Text(error.localizedDescription),
+                        primaryButton: .cancel(),
+                        secondaryButton: .default(Text("登录")) {
+                            self.store.dispatch(.switchTab(index: .settings))
+                        }
+                    )
                 }
                 Button(action: {
                     print("Panel")
+                    let target = !self.store.appState.pokemonList.selectionState.panelPresented
+                    self.store.dispatch(.togglePanelPresenting(presenting: target))
                 }) {
                     Image(systemName: "chart.bar")
                         .modifier(ToolButtonModifier())
                 }
-                Button(action: {
-                    print("Web")
-                }) {
-                    Image(systemName: "info.circle")
-                        .modifier(ToolButtonModifier())
-                }
+                NavigationLink(
+                    destination:
+                    SafariView(url: model.detailPageURL) {
+                        self.store.dispatch(.closeSafariView)
+                    }
+                        .navigationBarTitle(
+                            Text(model.name),
+                            displayMode: .inline
+                        ),
+                    isActive: expanded ?
+                        $store.appState.pokemonList.isSFViewActive :
+                        .constant(false),
+                    label: {
+                        Image(systemName: "info.circle")
+                            .modifier(ToolButtonModifier())
+                    }
+                )
             }
             .padding(.bottom, 12)
             .opacity(expanded ? 1.0 : 0.0)

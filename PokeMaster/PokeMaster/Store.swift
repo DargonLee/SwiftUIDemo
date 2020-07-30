@@ -62,7 +62,51 @@ class Store: ObservableObject {
                     case .failure(let error):
                     print(error)
             }
+            case .toggleListSelection(let index):
+                let expanding = appState.pokemonList.selectionState.expandingIndex
+                if expanding == index {
+                    appState.pokemonList.selectionState.expandingIndex = nil
+                    appState.pokemonList.selectionState.panelPresented = false
+                } else {
+                    appState.pokemonList.selectionState.expandingIndex = index
+                    appState.pokemonList.selectionState.panelIndex = index
+                }
+
+            case .togglePanelPresenting(let presenting):
+                appState.pokemonList.selectionState.panelPresented = presenting
             
+            case .closeSafariView:
+                appState.pokemonList.isSFViewActive = false
+            
+            case .loadAbilities(let pokemon):
+                appCommand = LoadAbilitiesCommand(pokemon: pokemon)
+            case .loadAbilitiesDone(let result):
+                switch result {
+                case .success(let loadedAbilities):
+                    var abilities = appState.pokemonList.abilities ?? [:]
+                    for ability in loadedAbilities {
+                        abilities[ability.id] = ability
+                    }
+                    appState.pokemonList.abilities = abilities
+                case .failure(let error):
+                    print(error)
+                }
+            case .toggleFavorite(let index):
+                guard let loginUser = appState.settings.loginUser else {
+                    appState.pokemonList.favoriteError = .requiresLogin
+                    break
+                }
+
+                var newFavorites = loginUser.favoritePokemonIDs
+                if newFavorites.contains(index) {
+                    newFavorites.remove(index)
+                } else {
+                    newFavorites.insert(index)
+                }
+                appState.settings.loginUser!.favoritePokemonIDs = newFavorites
+            case .switchTab(let index):
+            appState.pokemonList.selectionState.panelPresented = false
+            appState.mainTab.selection = index
         }
         return (appState, appCommand)
     }

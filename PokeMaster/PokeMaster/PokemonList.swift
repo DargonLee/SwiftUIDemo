@@ -19,7 +19,7 @@ struct PokemonList: View {
 //            PokemonInfoRow(model: pokemon)
 //        }
         ScrollView {
-            TextField("搜索", text: $searchStr)
+            TextField("搜索", text: $store.appState.pokemonList.searchText.animation(nil))
                 .frame(height: 40)
                 .padding(.horizontal, 25)
             //store.appState.pokemonList.allPokemonsByID
@@ -35,6 +35,8 @@ struct PokemonList: View {
                     }
                 }
             }
+            Spacer()
+            .frame(height: 8)
         }
 //        .overlay(
 //            VStack {

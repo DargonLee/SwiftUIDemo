@@ -15,5 +15,17 @@ enum AppAction {
     
     case loadPokemons
     case loadPokemonsDone(result: Result<[PokemonViewModel], AppError>)
+    
+    case toggleListSelection(index: Int?)
+    case togglePanelPresenting(presenting: Bool)
+    
+    case closeSafariView
+    
+    case loadAbilities(pokemon: Pokemon)
+    case loadAbilitiesDone(result: Result<[AbilityViewModel], AppError>)
+    
+    case toggleFavorite(index: Int)
+
+    case switchTab(index: AppState.MainTab.Index)
 }
 
