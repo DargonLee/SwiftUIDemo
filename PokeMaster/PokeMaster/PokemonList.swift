@@ -9,28 +9,20 @@
 import SwiftUI
 
 struct PokemonList: View {
+    @EnvironmentObject var store: Store
+    
     @State var expandingIndex: Int?
     @State var searchStr: String = ""
+    
     var body: some View {
 //        List(PokemonViewModel.all) { pokemon in
 //            PokemonInfoRow(model: pokemon)
 //        }
         ScrollView {
-            HStack {
-                TextField("搜索", text: $searchStr, onEditingChanged: { changed in
-                    print("onEditing: \(changed)")
-                }) {
-                    print("userName: \(self.searchStr)")
-                }
-                .font(.system(size: 15))
-                .padding(6)
-            }
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.green, style: StrokeStyle(lineWidth: 1))
-                )
-                .padding()
-            
+            TextField("搜索", text: $searchStr)
+                .frame(height: 40)
+                .padding(.horizontal, 25)
+            //store.appState.pokemonList.allPokemonsByID
             ForEach(PokemonViewModel.all) { pokemon in
                 PokemonInfoRow(
                     model: pokemon,

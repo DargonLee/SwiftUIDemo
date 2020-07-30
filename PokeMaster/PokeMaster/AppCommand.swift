@@ -31,6 +31,19 @@ struct LoginAppCommand: AppCommand {
     }
 }
 
+struct LoadPokemonsCommand: AppCommand {
+    func execute(in store: Store) {
+        _ = LoadPokemonRequest.all
+            .sink(receiveCompletion: { complete in
+            if case.failure(let error) = complete {
+                store.dispatch(.loadPokemonsDone(result: .failure(error)))
+            }
+        }, receiveValue: { value in
+            store.dispatch(.loadPokemonsDone(result: .success(value)))
+        })
+    }
+}
+
 struct WriteUserAppCommand: AppCommand {
     let user: User
     

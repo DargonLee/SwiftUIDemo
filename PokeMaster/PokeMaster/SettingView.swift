@@ -33,13 +33,14 @@ struct SettingView: View {
     var accountSection: some View {
         Section(header: Text("账户")) {
             if settings.loginUser == nil {
-                Picker(selection: settingBinding.accountBehavior, label: Text("")) {
+                Picker(selection: settingBinding.checker.accountBehavior, label: Text("")) {
                     ForEach(AppState.Settings.AccountBehavior.allCases, id: \.self) {
                         Text($0.text)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                TextField("电子邮箱", text: settingBinding.email)
+                TextField("电子邮箱", text: settingBinding.checker.email)
+                    .foregroundColor(settings.isEmailValid ? .green : .red)
                 SecureField("密码", text: settingBinding.password)
                 if settings.accountBehavior == .register {
                     SecureField("确认密码", text: settingBinding.verifyPassword)

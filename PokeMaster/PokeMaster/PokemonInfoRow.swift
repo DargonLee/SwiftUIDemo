@@ -22,6 +22,11 @@ struct PokemonInfoRow: View {
                     .frame(width: 50, height: 50)
                     .aspectRatio(contentMode: .fit)
                     .shadow(radius: 4)
+//                KFImage(model.iconImageURL)
+//                      .resizable()
+//                      .frame(width: 50, height: 50)
+//                      .aspectRatio(contentMode: .fit)
+//                      .shadow(radius: 4)
                 Spacer()
                 VStack(alignment: .trailing) {
                     Text(model.name)

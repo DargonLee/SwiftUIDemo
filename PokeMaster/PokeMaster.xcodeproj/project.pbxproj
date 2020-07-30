@@ -15,6 +15,8 @@
 		18A5175D24D0085C0098A3A1 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A5175C24D0085C0098A3A1 /* AppError.swift */; };
 		18A5175F24D00A3E0098A3A1 /* AppCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A5175E24D00A3E0098A3A1 /* AppCommand.swift */; };
 		18A5176124D011290098A3A1 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A5176024D011280098A3A1 /* FileStorage.swift */; };
+		18A5176324D125D60098A3A1 /* EmailCheckingRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A5176224D125D50098A3A1 /* EmailCheckingRequest.swift */; };
+		18A5176524D279AF0098A3A1 /* LoadPokemonRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A5176424D279AF0098A3A1 /* LoadPokemonRequest.swift */; };
 		18BDEF9E24BEBA4200A3D68E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BDEF9D24BEBA4200A3D68E /* AppDelegate.swift */; };
 		18BDEFA024BEBA4200A3D68E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BDEF9F24BEBA4200A3D68E /* SceneDelegate.swift */; };
 		18BDEFA224BEBA4200A3D68E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BDEFA124BEBA4200A3D68E /* ContentView.swift */; };
@@ -113,6 +115,8 @@
 		18A5175C24D0085C0098A3A1 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		18A5175E24D00A3E0098A3A1 /* AppCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommand.swift; sourceTree = "<group>"; };
 		18A5176024D011280098A3A1 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
+		18A5176224D125D50098A3A1 /* EmailCheckingRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailCheckingRequest.swift; sourceTree = "<group>"; };
+		18A5176424D279AF0098A3A1 /* LoadPokemonRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadPokemonRequest.swift; sourceTree = "<group>"; };
 		18BDEF9A24BEBA4200A3D68E /* PokeMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokeMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18BDEF9D24BEBA4200A3D68E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18BDEF9F24BEBA4200A3D68E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -245,10 +249,12 @@
 				18BDEF9F24BEBA4200A3D68E /* SceneDelegate.swift */,
 				18BDEFA124BEBA4200A3D68E /* ContentView.swift */,
 				1843F26224CED7D800ADBFC6 /* MainTab.swift */,
-				1843F26424CEDFC100ADBFC6 /* Store.swift */,
 				18A5175A24D0081A0098A3A1 /* LoginRequest.swift */,
+				18A5176424D279AF0098A3A1 /* LoadPokemonRequest.swift */,
+				1843F26424CEDFC100ADBFC6 /* Store.swift */,
 				18A5175C24D0085C0098A3A1 /* AppError.swift */,
 				1843F26624CEDFCE00ADBFC6 /* AppState.swift */,
+				18A5176224D125D50098A3A1 /* EmailCheckingRequest.swift */,
 				18A5175824D003530098A3A1 /* AppAction.swift */,
 				18A5175E24D00A3E0098A3A1 /* AppCommand.swift */,
 				18A5176024D011280098A3A1 /* FileStorage.swift */,
@@ -556,11 +562,13 @@
 				18BDEFC224BEE07200A3D68E /* PokemonInfoRow.swift in Sources */,
 				18A5175924D003530098A3A1 /* AppAction.swift in Sources */,
 				18BDF09024BF190F00A3D68E /* SettingRootView.swift in Sources */,
+				18A5176324D125D60098A3A1 /* EmailCheckingRequest.swift in Sources */,
 				18BDF08224BF083800A3D68E /* PokemonInfoPanelAbilityList.swift in Sources */,
 				18A5175D24D0085C0098A3A1 /* AppError.swift in Sources */,
 				18A5176124D011290098A3A1 /* FileStorage.swift in Sources */,
 				18BDF08E24BF18C800A3D68E /* PokemonRootView.swift in Sources */,
 				18BDF05624BEE1B200A3D68E /* Language.swift in Sources */,
+				18A5176524D279AF0098A3A1 /* LoadPokemonRequest.swift in Sources */,
 				18BDF08624BF104F00A3D68E /* SettingView.swift in Sources */,
 				18BDF01524BEE1B200A3D68E /* Helpers.swift in Sources */,
 				18BDF01424BEE1B200A3D68E /* Sample.swift in Sources */,
