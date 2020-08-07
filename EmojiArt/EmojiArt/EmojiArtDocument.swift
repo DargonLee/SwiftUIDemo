@@ -8,10 +8,12 @@
 
 import SwiftUI
 
+// ObservableObject 凡是订阅了这个属性的对象 都会收到
 class EmojiArtDocument: ObservableObject
 {
     static let paletter: String = "⭐️⛈🍎🌏🥨⚾️"
     
+    // 这里的Published修饰符标识当前属性发生改变的时候 发布通知
     @Published private var emojiArt: EmojiArt = EmojiArt()
     
     @Published private(set) var backgroundImage: UIImage?

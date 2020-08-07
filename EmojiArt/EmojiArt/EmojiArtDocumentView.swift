@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct EmojiArtDocumentView: View {
+    //ObservedObject 表示监听当前对象发生改变的时候重新构建UI界面
     @ObservedObject var document: EmojiArtDocument
     
     var body: some View {
