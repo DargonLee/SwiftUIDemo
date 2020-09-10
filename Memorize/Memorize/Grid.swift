@@ -9,7 +9,8 @@
 import SwiftUI
 
 /// 这个尖括号告诉 Swift 那个 Item 是 结构体 Grid 中一个占位类型名，因此 Swift 不会去查找名为 Item 的实际类型
-
+/// Item: Identifiable 意思是Item这类型必须要遵循Identifiable这个协议的类型才可以
+/// ItemView: View 意思是ItemView这个类型必须要遵守View这个协议的类型才可以
 struct Grid<Item, ItemView>: View where Item: Identifiable, ItemView: View {
     private var items: [Item]
     private var viewForItem: (Item) -> ItemView

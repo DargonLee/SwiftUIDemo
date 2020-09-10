@@ -184,8 +184,6 @@ var body: some View {
 
 > “小技巧：你可以在预览中使用在 ContentView() 后面添加 environment(\.colorScheme, .dark) 来快速检查深色模式下的 UI。”
 
-
-
 ### 第二章
 
 ##### @State数据状态驱动界面
@@ -344,8 +342,6 @@ Image("Pokemon")
 
 2、图片的原始尺寸比例和使用 frame(width:height:) 所设定的长宽比例可能有所不同。aspectRatio 让图片能够保持原始比例。不过在本例中，缩放前的图片长宽比也是 1:1，所以预览中不会有什么变化。
 
-
-
 - 加载系统提供的图标
 
 ```swift
@@ -359,8 +355,6 @@ Image(systemName: "info.circle")
 
 2、.font(.system(size: 25)) 虽然可以控制图片的显示尺寸，但是它并不会改变 Image 本身的 frame。默认情况下的 frame.size 非常小，这会使按钮的可点击范围过小，因此我们使用 .frame(width:height:) 来指定尺寸。因为加载后的 SF Symbol 是 Image，配合 frame 使用上面处理图像时提到的 resizable 和 padding 来指定显示范围和可点击范围也是可以的，但直接设置 font 和 frame 会更简单一些。
 
-
-
 ##### View Modifier 使用
 
 ViewModifier 是 SwiftUI 提供的一个协议，它只有一个要求实现的方法：
@@ -372,8 +366,6 @@ public protocol ViewModifier {
 ```
 
 我需要将重复创建的modifier抽离出一个自定义的 modifier，就可以跟系统的modifier使用一样方便
-
-
 
 定义：
 
@@ -422,12 +414,9 @@ let gradientStyle = LinearGradient(
  endPoint: .trailing)
 ```
 
-
 创建一个代表渐变数据的模型：Gradient，它基本就是一系列颜色。如果我们不明确指定颜色位置的话，输入的颜色将在渐变轴上等分。比如例子中的渐变起始位置和终止位置上分别是白色和宝可梦模型中定义的颜色。
 
 选取一个渐变 style，比如线性渐变 (LinearGradient)，径向渐变(RadialGradient) 或角度渐变 (AngularGradient)。将 1 中定义的 Gradient 和合适的渐变参数传入，就可以得到一个可适用于 Shape 上的渐变了。
-
-
 
 ##### ZStack使用
 
@@ -479,8 +468,6 @@ ZStack是在Z轴上的层叠，比如我们要给View的background 既要添加�
 }
 ```
 
-
-
 另一种动画方式，隐式动画，就更简单。通过 View 上的 animtion 修饰，就可以在 View 中支持动画的属性发生变化时自动为整个 View 添加上动画支持了。可以将上面的代码重写一下：
 
 ```swift
@@ -523,8 +510,6 @@ ScrollView {
 
 SwiftUI 还处在非常初期的阶段，难免会出现无法实现的效果或者在 SwiftUI 中无法绕过的问题。遇到这样的情况时，最简单的解决方案是把 UIKit 中已有的部分进行封装，提供给 SwiftUI 使用。
 
-
-
 SwiftUI 中的 UIViewRepresentable 协议提供了封装 UIView 的功能。这个协议要求我们实现两个方法：
 
 ```swift
@@ -544,26 +529,26 @@ protocol UIViewRepresentable : View
 ```swift
 struct BlurView: UIViewRepresentable {
     let style: UIBlurEffect.Style
-    
+
     func makeUIView(context: UIViewRepresentableContext<BlurView>) -> UIView {
         let view = UIView(frame: .zero)
         view.backgroundColor = .clear
-        
+
         let blurEffect = UIBlurEffect(style: style)
         let blurView = UIVisualEffectView(effect: blurEffect)
-        
+
         blurView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(blurView)
-        
+
         NSLayoutConstraint.activate([
             blurView.heightAnchor.constraint(equalTo: view.heightAnchor),
             blurView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
         return view
     }
-    
+
     func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<BlurView>) {
-        
+
     }
 }
 
@@ -631,4 +616,43 @@ Section(header: Text("选项")) {
                 Text("只显示收藏")
             }
         }
+```
+
+#### 包装UIViewController
+
+```objectivec
+struct SafariView: UIViewControllerRepresentable {
+
+    let url: URL
+    let onFinished: () -> Void
+
+    func makeUIViewController(context: UIViewControllerRepresentableContext<SafariView>) -> SFSafariViewController {
+        let controller = SFSafariViewController(url: url)
+        controller.delegate = context.coordinator
+        return controller
+    }
+
+    func updateUIViewController(
+        _ uiViewController: SFSafariViewController,
+        context: UIViewControllerRepresentableContext<SafariView>)
+    {
+
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, SFSafariViewControllerDelegate {
+        let parent: SafariView
+
+        init(_ parent: SafariView) {
+            self.parent = parent
+        }
+
+        func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+            parent.onFinished()
+        }
+    }
+}
 ```
