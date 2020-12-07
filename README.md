@@ -6,7 +6,7 @@ demo截图
 
 ![](https://images.unsplash.com/photo-1607105794278-a7eb7236776b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXw5MDg0MHwwfDF8YWxsfDJ8fHx8fHwyfA&ixlib=rb-1.2.1&q=80&w=1080 "Magic Mind")
 
-![](https://github.com/DargonLee/SwiftUIDemo/tree/master/Pictures/Hello.png)
+![](https://github.com/DargonLee/SwiftUIDemo/blob/master/Pictures/Hello.png)
 
 ##### Memorize
 
@@ -14,7 +14,7 @@ demo截图
 
 ##### Calculator
 
-![avatar](https://github.com/DargonLee/SwiftUIDemo/tree/master/Pictures/Calculator.png)
+![avatar](https://github.com/DargonLee/SwiftUIDemo/blob/master/Pictures/Memorize.png)
 
 ### 第一章
 
