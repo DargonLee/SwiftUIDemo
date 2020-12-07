@@ -6,15 +6,15 @@ demo截图
 
 ![](https://images.unsplash.com/photo-1607105794278-a7eb7236776b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXw5MDg0MHwwfDF8YWxsfDJ8fHx8fHwyfA&ixlib=rb-1.2.1&q=80&w=1080 "Magic Mind")
 
-![](/Users/apple/Library/Application%20Support/marktext/images/62edfe2435064d33dd4030bd5c210a7a38e4b775.png)
+![](https://github.com/DargonLee/SwiftUIDemo/tree/master/Pictures/Hello.png)
 
 ##### Memorize
 
-![avatar](/Users/apple/Library/Application%20Support/marktext/images/038dd09ff262dc909c5586d22372117690e29702.png)
+![avatar](https://github.com/DargonLee/SwiftUIDemo/tree/master/Pictures/Memorize.png)
 
 ##### Calculator
 
-![avatar](/Users/apple/Library/Application%20Support/marktext/images/45a2e7f5c1df6d5e1ae00b1c81acbc2533ea6749.png)
+![avatar](https://github.com/DargonLee/SwiftUIDemo/tree/master/Pictures/Calculator.png)
 
 ### 第一章
 
