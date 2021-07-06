@@ -16,6 +16,7 @@ struct Pokemon: Codable, Identifiable {
     let num: Int
     let name: String
     let variations: [PokeVariation]
+    let link: String
 }
 
 struct PokeVariation: Codable {

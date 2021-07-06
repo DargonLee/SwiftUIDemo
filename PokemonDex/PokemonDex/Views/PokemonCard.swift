@@ -13,6 +13,9 @@ struct PokemonCard: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
+            NavigationLink(destination: PokeDetail(poke: poke)) {
+                EmptyView()
+            }
 //            if #available(iOS 15.0, *) {
 //                AsyncImage(url: poke.variations[0].urlImage) { image in
 //                    image
@@ -35,13 +38,12 @@ struct PokemonCard: View {
                     .aspectRatio(contentMode: .fit)
                     .cornerRadius(20)
                     .shadow(radius: 20)
-                    .padding()
 //            }
             
             if #available(iOS 15.0, *) {
                 PokemonText(name: poke.name)
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
-                    .offset(x: 0, y: -40)
+                    .offset(x: 0, y: -30)
             }else {
                 PokemonText(name: poke.name)
             }
@@ -51,6 +53,6 @@ struct PokemonCard: View {
 
 struct PokemonCard_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonCard(poke: Pokemon(num: 1, name: "logo", variations: []))
+        PokemonCard(poke: Pokemon(num: 1, name: "logo", variations: [], link: ""))
     }
 }

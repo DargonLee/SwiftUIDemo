@@ -9,20 +9,31 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var pokemonVM: PokemonViewModel = PokemonViewModel()
+    @State var searchText: String = ""
     
     var body: some View {
         NavigationView {
             if #available(iOS 15.0, *) {
-                PokemonList(pokemons: pokemonVM.pokemons)
+                PokemonList(pokemons: filteredPokemons)
                     .task {
                         await pokemonVM.fetchAsyncPokemons()
                     }
+                    .searchable(text: $searchText)
                     .navigationTitle("Pokemons")
             } else {
-                PokemonList(pokemons: pokemonVM.pokemons)
+                PokemonList(pokemons: filteredPokemons)
                     .navigationTitle("Pokemons")
             }
                 
+        }
+    }
+    
+    var filteredPokemons: [Pokemon] {
+        if searchText.isEmpty {
+            return pokemonVM.pokemons
+        }
+        return pokemonVM.pokemons.filter{
+            $0.name.contains(searchText)
         }
     }
 }
