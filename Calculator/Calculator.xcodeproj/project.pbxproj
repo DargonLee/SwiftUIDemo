@@ -18,6 +18,16 @@
 		18BDEF9024BDBB3400A3D68E /* CalculatorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BDEF8F24BDBB3400A3D68E /* CalculatorModel.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		18EDCDBB2719173B00489777 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 18EDCDB72719173B00489777 /* EmojiArt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 187B24BF24BC48D2000EFA9C;
+			remoteInfo = EmojiArt;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		18BDEF7424BD548800A3D68E /* Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18BDEF7724BD548800A3D68E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -30,6 +40,7 @@
 		18BDEF8B24BD615C00A3D68E /* CalculatorButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorButtonItem.swift; sourceTree = "<group>"; };
 		18BDEF8D24BD984D00A3D68E /* CalculatorBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorBrain.swift; sourceTree = "<group>"; };
 		18BDEF8F24BDBB3400A3D68E /* CalculatorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorModel.swift; sourceTree = "<group>"; };
+		18EDCDB72719173B00489777 /* EmojiArt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = EmojiArt.xcodeproj; path = ../EmojiArt/EmojiArt.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +57,7 @@
 		18BDEF6B24BD548800A3D68E = {
 			isa = PBXGroup;
 			children = (
+				18EDCDB72719173B00489777 /* EmojiArt.xcodeproj */,
 				18BDEF7624BD548800A3D68E /* Calculator */,
 				18BDEF7524BD548800A3D68E /* Products */,
 			);
@@ -82,6 +94,14 @@
 				18BDEF8024BD548B00A3D68E /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		18EDCDB82719173B00489777 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				18EDCDBC2719173B00489777 /* EmojiArt.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,12 +150,28 @@
 			mainGroup = 18BDEF6B24BD548800A3D68E;
 			productRefGroup = 18BDEF7524BD548800A3D68E /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 18EDCDB82719173B00489777 /* Products */;
+					ProjectRef = 18EDCDB72719173B00489777 /* EmojiArt.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				18BDEF7324BD548800A3D68E /* Calculator */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		18EDCDBC2719173B00489777 /* EmojiArt.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = EmojiArt.app;
+			remoteRef = 18EDCDBB2719173B00489777 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		18BDEF7224BD548800A3D68E /* Resources */ = {

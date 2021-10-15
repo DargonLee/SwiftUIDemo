@@ -1,4 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <FileRef
+      location = "group:PokemonDex/PokemonDex.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Scrumdinger/Scrumdinger.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Sandwiches/Sandwiches.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:PokeMaster/PokeMaster.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Memorize/Memorize.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:HelloSwiftUI/HelloSwiftUI.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Calculator/../EmojiArt/EmojiArt.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Calculator/Calculator.xcodeproj">
+   </FileRef>
 </Workspace>
